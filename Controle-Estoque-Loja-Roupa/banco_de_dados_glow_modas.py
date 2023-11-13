@@ -9,7 +9,7 @@ cur.execute("""CREATE TABLE IF NOT EXISTS produtos (
     nome_produto TEXT NOT NULL,
     tipo_produto TEXT NOT NULL,
     valor_compra_produto REAL NOT NULL,
-    quantidade_estoque REAL NOT NULL,
+    quantidade_estoque INTEGER NOT NULL,
     data_compra TEXT NOT NULL
 );""")
 #OBS: TALVEZ quantidade_estoque SEJA UMA NOVA TABELA
