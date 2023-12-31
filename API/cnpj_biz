@@ -1,0 +1,17 @@
+import requests
+
+url = 'https://receitaws.com.br/v1/cnpj'
+cnpj = '20041698000109'
+
+# URL completa com o CNPJ
+url_completa = f'{url}/{cnpj}'
+
+# Faça a solicitação
+resposta = requests.get(url_completa)
+
+if resposta.status_code == 200:
+    dados = resposta.json()
+    # Trabalhe com os dados recebidos
+    print(dados)
+else:
+    print(f'Erro ao fazer a solicitação. Código de status: {resposta.status_code}')
