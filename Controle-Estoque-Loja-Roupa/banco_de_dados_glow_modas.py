@@ -1,4 +1,6 @@
 import sqlite3
+from datetime import datetime
+
 
 con = sqlite3.connect("glow_modas.db")
 cur = con.cursor()
@@ -10,7 +12,8 @@ cur.execute("""CREATE TABLE IF NOT EXISTS produtos (
     tipo_produto TEXT NOT NULL,
     valor_compra_produto REAL NOT NULL,
     quantidade_estoque INTEGER NOT NULL,
-    data_compra TEXT NOT NULL
+    data_compra TEXT NOT NULL,
+    data_cadastro TEXT NOT NULL
 );""")
 #OBS: TALVEZ quantidade_estoque SEJA UMA NOVA TABELA
 
@@ -18,9 +21,10 @@ cur.execute("""CREATE TABLE IF NOT EXISTS produtos (
 # Criar a tabela Venda
 cur.execute("""CREATE TABLE IF NOT EXISTS vendas (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    id_Produto INTEGER NOT NULL,
+    id_produto INTEGER NOT NULL,
     valor_venda_produto REAL NOT NULL,
     data_venda TEXT NOT NULL,
+    data_cadastro TEXT NOT NULL,
     FOREIGN KEY (id_Produto)
     REFERENCES produto (id)   
 );""")
@@ -32,17 +36,18 @@ tipo_produto = 'Cropped'
 valor_compra_produto = 9.99
 quantidade_estoque = 5
 data_compra = '2023-11-06'
-
+data_cadastro = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+print(type(data_cadastro))
 id_produto = 1
 valor_venda_produto = 19.99
 data_venda = '2023-11-07'
 
 
 #Inserir um novo registro na tabela
-cur.execute("INSERT INTO produtos (nome_produto, tipo_produto, valor_compra_produto, quantidade_estoque, data_compra) VALUES (?, ?, ?, ?)", (nome_produto, tipo_produto, valor_compra_produto, quantidade_estoque, data_compra))
+cur.execute("INSERT INTO produtos (nome_produto, tipo_produto, valor_compra_produto, quantidade_estoque, data_compra, data_cadastro) VALUES (?, ?, ?, ?, ?, ?)", (nome_produto, tipo_produto, valor_compra_produto, quantidade_estoque, data_compra, data_cadastro))
 
-cur.execute("INSERT INTO vendas (id_produto, valor_venda_produto, data_venda) VALUES (?, ?, ?)", (id_produto, valor_venda_produto, data_venda))
-cur.execute("INSERT INTO vendas (id_produto, valor_venda_produto, data_venda) VALUES (?, ?, ?)", (id_produto, valor_venda_produto, '2023-11-08'))
+cur.execute("INSERT INTO vendas (id_produto, valor_venda_produto, data_venda, data_cadastro) VALUES (?, ?, ?, ?)", (id_produto, valor_venda_produto, data_venda, data_cadastro))
+cur.execute("INSERT INTO vendas (id_produto, valor_venda_produto, data_venda, data_cadastro) VALUES (?, ?, ?, ?)", (id_produto, valor_venda_produto, '2023-11-08', data_cadastro))
 
 # to select all column we will use 
 query_select_produtos = '''SELECT * FROM produtos'''

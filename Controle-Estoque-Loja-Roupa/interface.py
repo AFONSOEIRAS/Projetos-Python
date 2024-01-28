@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import messagebox
 import sqlite3
+from datetime import datetime
 
 
 
@@ -20,20 +21,22 @@ class Application():
         self.cur = self.con.cursor()
 
         self.cur.execute("""CREATE TABLE IF NOT EXISTS produtos (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        nome_produto TEXT NOT NULL,
-        tipo_produto TEXT NOT NULL,
-        valor_compra_produto REAL NOT NULL,
-        quantidade INTEGER NOT NULL,
-        data_compra TEXT NOT NULL
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nome_produto TEXT NOT NULL,
+            tipo_produto TEXT NOT NULL,
+            valor_compra_produto REAL NOT NULL,
+            quantidade_estoque INTEGER NOT NULL,
+            data_compra TEXT NOT NULL,
+            data_cadastro TEXT NOT NULL
         );""")
 
         self.cur.execute("""CREATE TABLE IF NOT EXISTS vendas (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        id_Produto INTEGER NOT NULL,
+        id_produto INTEGER NOT NULL,
         valor_venda_produto REAL NOT NULL,
         data_venda TEXT NOT NULL,
-        FOREIGN KEY (id_Produto)
+        data_cadastro TEXT NOT NULL,
+        FOREIGN KEY (id_produto)
         REFERENCES produto (id)   
         );""")
         
@@ -134,8 +137,8 @@ class Application():
             #IMPORTANTE
             #ADICIONAR VALIDAÇÃO PARA DATA E FAZER CONVERSÃO DE UMA DATA INTERIDA NO FORMADO dd/MM/yyyy PARA O FORMATO yyyy-MM-dd
             data_compra_insert_database = str(self.data_compra.get())
-
-            self.cur.execute("INSERT INTO produtos (nome_produto, tipo_produto, valor_compra_produto, quantidade, data_compra) VALUES (?, ?, ?, ?,?)", (nome_produto_insert_database, tipo_produto_insert_database, valor_compra_produto_insert_database, quantidade_insert_database, data_compra_insert_database))
+            data_cadastro = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            self.cur.execute("INSERT INTO produtos (nome_produto, tipo_produto, valor_compra_produto, quantidade_estoque, data_compra, data_cadastro) VALUES (?, ?, ?, ?, ?, ?)", (nome_produto_insert_database, tipo_produto_insert_database, valor_compra_produto_insert_database, quantidade_insert_database, data_compra_insert_database, data_cadastro))
         
             print("Nome Produto: " + str(self.nome_produto.get()))
             print("Tipo Produto: " + str(self.tipo_produto.get()))
